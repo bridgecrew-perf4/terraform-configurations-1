@@ -1,59 +1,67 @@
-# packer-aws-builder
-[![python](https://img.shields.io/badge/python-v3.7.X-green.svg)](https://www.python.org/)
-[![pip](https://img.shields.io/badge/pip-v10.0.X-yellow.svg)](https://pypi.org/project/pip/)
-[![virtualenv](https://img.shields.io/badge/virtualenv-v15.1.X-red.svg)](https://virtualenv.pypa.io/en/stable/)
+# terraform-opa-simple-example
+[![python](https://img.shields.io/badge/terraform-v0.14.8-blueviolet.svg)](https://www.terraform.io/)
+[![pip](https://img.shields.io/badge/conftest-v0.23.0-yellow.svg)](https://www.conftest.dev/)
 
-Project name is a `<utility/tool/feature>` that allows `<insert_target_audience>` to do `<action/task_it_does>`.
-
-Additional line of information text about what the project does. Your introduction should be around 2 or 3 sentences. Don't go overboard, people won't read it.
+terraform-opa-simple-example is a project that show people how to create an always compliance infrastructure as code.
 
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
-- [Installation](#installation)
 - [Quickstart](#quickstart)
 - [Contributing](#contributing)
 - [Further reading / Useful links](#further-reading--useful-links)
+- [Contact](#Contact)
 
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
-* You have installed the latest version of `<coding_language/dependency/requirement_1>`
-* You have a `<Windows/Linux/Mac>` machine. State which OS is supported/which is not.
-* You have read `<guide/link/documentation_related_to_project>`.
-
-## Installation
-
-To install <project_name>, follow these steps:
-
-Linux and macOS:
-```
-<install_command>
-```
-
-Windows:
-```
-<install_command>
-```
-## Using <project_name>
-
-To use <project_name>, follow these steps:
-
-```
-<usage_example>
-```
-
-Add run commands and examples you think users will find useful. Provide an options reference for bonus points!
+* You have installed the latest version of [Terraform](https://www.terraform.io/)
+* You have installed the latest version of [Conftest](https://www.conftest.dev/)
+* You have read about [Open Policy Agent and Rego](https://www.openpolicyagent.org/).
 
 ## Quickstart
 
-To use <project_name>, follow these steps:
+Clone this repo into new project folder (e.g., my-proj).
 
+```bash
+git clone https://github.com/macuartin/terraform-opa-simple-example.git  my-proj
+cd my-proj
 ```
-<usage_example>
+Discard the .git folder.
+
+```bash
+rm -rf .git 
 ```
 
-Add run commands and examples you think users will find useful. Provide an options reference for bonus points!
+Edit variables.tf with your aws account_id, aws profile, aws region and a stack_id for your infrastructure
+
+```hcl
+stack_id = ""
+account_id = ""
+profile = ""
+region = ""
+```
+
+Initialize Terraform and ask it to calculate what changes it will make and store the output in plan.binary
+```bash
+terraform init
+terraform plan --out tfplan.binary
+```
+
+Use the command terraform show to convert the Terraform plan into JSON so that OPA can read the plan.
+```bash
+terraform init
+terraform show -json tfplan.binary > tfplan.json
+```
+
+To evaluate the policy against that plan, you hand OPA the policy, the Terraform plan as input, and ask conftest to evaluate.
+
+Policies by default should be placed in a directory called policy, but this can be overridden with the --policy flag.
+
+```bash
+conftest test tfplan.json
+conftest test tfplan.json --policy policy/main.rego
+```
 
 ## Contributing
 
@@ -69,14 +77,10 @@ Alternatively see the GitHub documentation on [creating a pull request](https://
 
 ## Further reading / Useful links
 
-* Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-* Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+* [Conftest](https://www.conftest.dev/)
+* [Open Policy Agent and Rego](https://www.openpolicyagent.org/).
 
 ## Contact
 
-If you want to contact me you can reach me at <your_email@address.com>.
+If you want to contact me you can reach me at <macuartin@gmail.com>.
 
-## License
-<!--- If you're not sure which open license to use see https://choosealicense.com/--->
-
-This project uses the following license: [<license_name>](<link>).
