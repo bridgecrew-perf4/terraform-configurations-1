@@ -50,7 +50,6 @@ terraform plan --out tfplan.binary
 
 Use the command terraform show to convert the Terraform plan into JSON so that OPA can read the plan.
 ```bash
-terraform init
 terraform show -json tfplan.binary > tfplan.json
 ```
 
